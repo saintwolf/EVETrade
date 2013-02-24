@@ -1,0 +1,12 @@
+{
+    "name": "saintwolf/eve-trade",
+    "authors": [
+        {
+            "name": "Saintwolf",
+            "email": "judiconis@gmail.com"
+        }
+    ],
+    "require": {
+        "pheal/pheal": "dev-master",
+    }
+}
