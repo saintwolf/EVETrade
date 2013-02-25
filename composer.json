@@ -7,6 +7,6 @@
         }
     ],
     "require": {
-        "pheal/pheal": "dev-master",
+        "pheal/pheal": "dev-master"
     }
 }
