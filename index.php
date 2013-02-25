@@ -12,7 +12,8 @@ $result = $db->query($sql);
 $api = $result->fetch_assoc();
 ?>
 <body style="text-align: center;"">
-<h1>COMING SOON!!!</h1>
+<h1>COMING SOON!!!</h1><br />
+<a href="overview.php">Temp Link To Overview</a><br />
 Choose Character:<br />
 <select>
     <option><?php print $api['charName']; ?></option>
