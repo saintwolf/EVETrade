@@ -134,7 +134,7 @@ foreach ($journals as $jr) {
         <td style="color: red"><?=number_format($transactionTaxes) ?> ISK</td>
     </tr>
     <tr>
-        <td colspan="4" style="text-align: right; color: <?php print (($totalSold - $totalBought - $brokerFees - $transactionTaxes) <= 0 ? 'red' : 'green') ?>">Summary: <?php print number_format($totalSold - $totalBought - $brokerFees - $transactionTaxes) ?></td>
+        <td colspan="4" style="text-align: right; color: <?php print (($totalSold - $totalBought - $brokerFees - $transactionTaxes) <= 0 ? 'red' : 'green') ?>">Summary: <?php print number_format($totalSold - $totalBought - $brokerFees - $transactionTaxes) ?> ISK</td>
     </tr>
 </table>
 <h2>TRANSACTIONS</h2><br />
