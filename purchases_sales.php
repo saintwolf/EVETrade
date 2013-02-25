@@ -23,7 +23,8 @@ $totalBought = 0.00;
 
 foreach ($transactions as $trn) {
     $transDate = substr($trn['transactionDateTime'], 0, 10);
-    if ((strtotime($transDate) > strtotime($dateFrom)) && (strtotime($transDate) < strtotime($dateTo))) {
+    
+    if ((strtotime($transDate) >= strtotime($dateFrom)) && (strtotime($transDate) <= strtotime($dateTo))) {
         if (!array_key_exists($trn['typeID'], $avgItemPrices)) {
             $avgItemPrices[$trn['typeID']] = array(
                 'purchased' =>  array(
@@ -155,9 +156,10 @@ foreach ($journals as $jr) {
 </thead> 
 <tbody>
     <?php foreach ($avgItemPrices as $item): ?>
+    
     <?php
-    $avgBought = $item['purchased']['items'] == 0 ? 0 : number_format($item['purchased']['totalPrice'] / $item['purchased']['items']);
-    $avgSold = $item['sold']['items'] == 0 ? 0 : number_format($item['sold']['totalPrice'] / $item['sold']['items'])
+    $avgBought = $item['purchased']['items'] == 0 ? 0 : ($item['purchased']['totalPrice'] / $item['purchased']['items']);
+    $avgSold = $item['sold']['items'] == 0 ? 0 : ($item['sold']['totalPrice'] / $item['sold']['items']);
     ?>
     <tr>
         <td>
@@ -176,7 +178,7 @@ foreach ($journals as $jr) {
             print number_format($item['purchased']['items'])
             ?>
         </td>
-        <td style="color: red"><?=$item['purchased']['items'] == 0 ? 0 : number_format((int)$avgBought) ?> ISK</td>
+        <td style="color: red"><?=$item['purchased']['items'] == 0 ? 0 : number_format(sprintf('%0.2f', $avgBought)) ?> ISK</td>
         <td>
             <?php
             print number_format($item['sold']['items'])
@@ -185,11 +187,16 @@ foreach ($journals as $jr) {
         <td style="color: green"><?=$item['sold']['items'] == 0 ? 0 : number_format((int)$avgSold) ?> ISK</td>
         <td>
         <?php
-        if ($item['sold']['items'] == 0 || $item['purchased']['items'] == 0) {
+        if ($avgSold == 0 && $avgBought == 0) {
             print 0;
+        } elseif ($avgBought == 0 && $avgSold != 0) {
+            print 100 * $item['purchased']['items'];
+        } elseif ($avgSold == 0 && $avgBought != 0) {
+            $margin = 100*(($avgSold + 0.01) / $avgBought-1);
+            print (int)$margin;
         }
         else {
-            $margin = 100.0*($avgSold / $avgBought-1);
+            $margin = 100*($avgSold / $avgBought-1);
             print (int)$margin;
         }
 1       ?>% 
