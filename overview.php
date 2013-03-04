@@ -18,11 +18,7 @@ foreach ($journal as $jr) {
         if (!array_key_exists('expenditure', $overview[$date])) {
             $overview[$date]['expenditure'] = 0.00;
         }
-        if (!array_key_exists('profit', $overview[$date])) {
-            $overview[$date]['profit'] = 0.00;
-        }
         $overview[$date]['expenditure'] = (double)substr($jr['amount'], 1) + $overview[$date]['expenditure'];
-        $overview[$date]['profit'] += (double)$jr['amount'];
     }
 }
 foreach ($transactions as $trn) {
@@ -33,19 +29,13 @@ foreach ($transactions as $trn) {
     if (!array_key_exists('expenditure', $overview[$date])) {
             $overview[$date]['expenditure'] = 0.00 ;
     }
-    if (!array_key_exists('profit', $overview[$date])) {
-            $overview[$date]['profit'] = 0.00;
-    }
     if (!array_key_exists('revenue', $overview[$date])) {
             $overview[$date]['revenue'] = 0.00;
     }
     if ($trn['transactionType'] == 'buy') {
-        $price = '-' . $trn['price'];
-        $overview[$date]['expenditure'] += (double)substr($price, 1);
-        $overview[$date]['profit'] += (double)$price;
+        $overview[$date]['expenditure'] += $trn['price'] * $trn['quantity'];
     } else {
-    $overview[$date]['profit'] += (double)$trn['price'];
-    $overview[$date]['revenue'] += (double)$trn['price'];
+        $overview[$date]['revenue'] += $trn['price'] * $trn['quantity'];
     }
 }
 $tradeDateTime = new DateTime();
@@ -80,7 +70,7 @@ for ($i = 1; $i <= 30; $i++) {
     $chartDate = $chartDateTime->format('Y-m-d');
     $expenditure[] = $overview[$chartDate]['expenditure'];
     $revenue[] = $overview[$chartDate]['revenue'];
-    $profit[] = $overview[$chartDate]['profit'];
+    $profit[] = $overview[$chartDate]['revenue'] - $overview[$chartDate]['expenditure'];
     
     $chartDateTime->setTimestamp($chartDateTime->getTimestamp() + (60 * 60 * 24));
     
@@ -202,6 +192,7 @@ $linechart->enableAutoStep();
     $tradeDateTime = new DateTime();
     for ($i = 1; $i <= 30; $i++): 
     $tradeDate = $tradeDateTime->format('Y-m-d');
+    $profit = $overview[$tradeDate]['revenue'] - $overview[$tradeDate]['expenditure'];
     ?>
     <tr>
         <td><?=$tradeDate ?></td>
@@ -211,8 +202,8 @@ $linechart->enableAutoStep();
         <td style="color: red;">
             -<?=number_format($overview[$tradeDate]['expenditure']) ?> ISK
         </td>
-        <td style="color: <?php print (double)($overview[$tradeDate]['revenue'] - $overview[$tradeDate]['expenditure']) <= 0 ? 'red' : 'green'; ?>;">
-            <?=number_format($overview[$tradeDate]['revenue'] - $overview[$tradeDate]['expenditure']) ?> ISK
+        <td style="color: <?php print $profit <= 0 ? 'red' : 'green'; ?>;">
+            <?=number_format($profit) ?> ISK
         </td>
     </tr>
     <?php $tradeDateTime->setTimestamp($tradeDateTime->getTimestamp() - (60 * 60 * 24)); ?>
