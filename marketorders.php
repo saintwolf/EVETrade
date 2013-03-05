@@ -26,18 +26,18 @@ $marketOrders = $pheal->MarketOrders(array('characterID' => $apiKeys['charId']))
             </td>
             <td>
                 <?php
-                print $mo['volRemaining'] . '/' . $mo['volEntered'];
+                print number_format($mo['volRemaining']) . '/' . number_format($mo['volEntered']);
                 ?>
             </td>
             <td>
                 <?php
                 print number_format($mo['price']);
-                ?>
+                ?> ISK
             </td>
             <td>
                 <?php
                 print number_format((int)$mo['price'] * $mo['volEntered']);
-                ?>
+                ?> ISK
             </td>
             <td>
                 <?php
@@ -81,18 +81,18 @@ $marketOrders = $pheal->MarketOrders(array('characterID' => $apiKeys['charId']))
             </td>
             <td>
                 <?php
-                print $mo['volRemaining'] . '/' . $mo['volEntered'];
+                print number_format($mo['volRemaining']) . '/' . number_format($mo['volEntered']);
                 ?>
             </td>
             <td>
                 <?php
                 print number_format($mo['price']);
-                ?>
+                ?> ISK
             </td>
             <td>
                 <?php
                 print number_format((int)$mo['price'] * $mo['volEntered']);
-                ?>
+                ?> ISK
             </td>
             <td>
                 <?php
